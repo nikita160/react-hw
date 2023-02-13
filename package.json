@@ -2,6 +2,7 @@
   "name": "react-hw",
   "author": "Nikita Maslennikov",
   "version": "0.1.0",
+  "homepage": "http://nikita160.github.io/react-hw",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",
