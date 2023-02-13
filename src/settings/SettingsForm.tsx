@@ -50,6 +50,7 @@ const reducer = (state: State, action: Action): State => {
         inputLogin: action.payload,
         inputRepo: '',
         repo: null,
+        blacklist: [],
       };
     }
     case ActionType.setUserData: {
@@ -60,7 +61,7 @@ const reducer = (state: State, action: Action): State => {
     }
 
     case ActionType.setInputRepo: {
-      return { ...state, inputRepo: action.payload };
+      return { ...state, inputRepo: action.payload, blacklist: [] };
     }
 
     case ActionType.setRepo: {
