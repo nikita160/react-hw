@@ -1,12 +1,5 @@
-import {
-  Avatar,
-  Box,
-  FormControlLabel,
-  FormGroup,
-  Stack,
-  Switch,
-} from '@mui/material';
-import { FC, useState } from 'react';
+import { Avatar, Box, Stack } from '@mui/material';
+import { FC } from 'react';
 import { UserData } from '../utilities';
 
 type Props = {

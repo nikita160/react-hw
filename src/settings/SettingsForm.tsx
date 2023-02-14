@@ -157,7 +157,7 @@ const SettingsForm: FC<Props> = ({ closeHandler }) => {
 
   return (
     <form>
-      <Stack spacing={2} sx={{ width: 300 }}>
+      <Stack spacing={2}>
         <AsyncInput
           id="login"
           label="Login"

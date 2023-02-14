@@ -43,11 +43,11 @@ const ActivityCard: FC<Props> = ({ settings }) => {
     setLoadingStatus({ isLoading: true, isLoaded: false, hasError: false });
     api
       .getContributors({ owner: settings.user.login, repo: settings.repo })
-      .then((res) =>
-        setReviewerList(
-          res.filter((item) => !settings.blacklist.includes(item.login))
-        )
-      )
+      .then((res) => {
+        res = res.filter((item) => !settings.blacklist.includes(item.login));
+        if (res.length === 1) setReviewer(res[0]);
+        setReviewerList(res);
+      })
       .then(() => {
         setLoadingStatus({ isLoading: false, isLoaded: true, hasError: false });
       })
@@ -72,7 +72,7 @@ const ActivityCard: FC<Props> = ({ settings }) => {
   return (
     <div>
       <div className={styles.repo}>Repository: {settings.repo}</div>
-      <Stack alignItems="center" p={2}>
+      <Stack alignItems="center" p={2} m={1}>
         {loadingStatus.isLoading && <CircularProgress />}
         {loadingStatus.isLoaded && reviewerList.length === 0 && (
           <Alert severity="warning">{Messages.noReviewrs}</Alert>
@@ -85,9 +85,11 @@ const ActivityCard: FC<Props> = ({ settings }) => {
             {Messages.numberOfReviewers + reviewerList.length}
           </Alert>
         )}
-      </Stack>
-      <Stack alignItems="center" p={3} height={4}>
+
         {isChoosing && <div>{Messages.choosingReviewer}</div>}
+        {reviewerSelected && !isChoosing && (
+          <Alert severity="success">{Messages.succesMessage}</Alert>
+        )}
       </Stack>
       <div className={styles.usersContainer}>
         <UserInfoCard userData={settings.user} role="Owner" />
@@ -95,7 +97,7 @@ const ActivityCard: FC<Props> = ({ settings }) => {
       </div>
       <div className={styles.buttonContainer}>
         <Button
-          disabled={isChoosing || reviewerList.length < 1}
+          disabled={isChoosing || reviewerList.length <= 1}
           variant="contained"
           onClick={onClickHandler}
         >

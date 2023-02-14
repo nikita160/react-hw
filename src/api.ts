@@ -1,9 +1,4 @@
-import { Octokit } from 'octokit';
 import { UserData } from './utilities';
-
-const octokit = new Octokit({
-  auth: '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',
-});
 
 export type RequestRepoParams = {
   login: string;
@@ -27,8 +22,7 @@ export const api: Api = {
   getUsersList: (userLogin: string) => {
     if (!userLogin) userLogin = '*';
     return getData<DataObj, UserData[]>(
-      '/search/users',
-      { q: userLogin },
+      'search/users?q=' + userLogin,
       ({ items }) =>
         items.map(({ login, avatar_url }) => ({ login, avatarUrl: avatar_url }))
     );
@@ -38,19 +32,15 @@ export const api: Api = {
     if (!login) Promise.reject();
     if (!query) query = '';
     return getData<DataObj, string[]>(
-      '/search/repositories',
-      { q: `user:${login} ${query}` },
+      `search/repositories?q=user:${login} ${query}`,
       ({ items }) => items.map(({ name }) => name)
     );
   },
 
   getContributors: ({ owner, repo }) => {
     return getData<DataArr, UserData[]>(
-      '/repos/{owner}/{repo}/contributors',
-      {
-        owner,
-        repo,
-      },
+      `repos/${owner}/${repo}/contributors`,
+
       (data) =>
         data
           .filter((item) => item.login !== owner)
@@ -69,34 +59,19 @@ type DataObj = {
 
 type DataArr = { login: string; avatar_url: string }[];
 
-type RequestUserOptions = {
-  q: string;
-};
-
-type RequestRepoOptions = {
-  q: string;
-};
-
-type RequestContributorOptions = {
-  owner: string;
-  repo: string;
-};
-
-type RequestOptions =
-  | RequestUserOptions
-  | RequestRepoOptions
-  | RequestContributorOptions;
-
 const getData = <P, T>(
   route: string,
-  options: RequestOptions,
-  formater: (data: P) => T
-) => {
-  return octokit.request(`GET ${route}`, options).then((res) => {
-    if (res.status !== 200) {
-      throw new Error();
-    } else {
-      return formater(res.data);
-    }
-  });
+  formatter: (data: P) => T
+): Promise<T> => {
+  return fetch('https://api.github.com/' + route)
+    .then((res) => {
+      if (res.status !== 200) {
+        throw new Error();
+      } else return res.json();
+    })
+    .then((data) => formatter(data));
 };
+
+///https://api.github.com/search/users?q=niki
+
+///https://api.github.com/search/repositories?q=user:{login}+q

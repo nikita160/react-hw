@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { GetDataCallback } from '../api';
 
-const TIMEOUT_INTERVAL = 250;
+const TIMEOUT_INTERVAL = 1000;
 
 type FetchingData<T> = {
   isLoading: boolean;
