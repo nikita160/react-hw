@@ -1,23 +1,15 @@
-import {
-  Autocomplete,
-  Button,
-  Chip,
-  Stack,
-  TextField,
-  TextFieldProps,
-} from '@mui/material';
+import { Autocomplete, Button, Chip, Stack, TextField } from '@mui/material';
 
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import { fetchContributors, fetchUser } from '../store/asyncAction';
 import { contributorsActionCreatorApi } from '../store/fetchingReducer';
 import { setBlackList } from '../store/blackListReduser';
 import { getSettings, setSettings } from '../utilities';
+import Input from './Input';
 
-type Props = { closeHandler: () => void };
-
-const SettingsForm: FC<Props> = ({ closeHandler }) => {
+const SettingsForm: FC = () => {
   const user = useAppSelector((state) => state.userFetching.data);
   const contributors = useAppSelector(
     (state) => state.contributorsFetching.data
@@ -26,30 +18,32 @@ const SettingsForm: FC<Props> = ({ closeHandler }) => {
 
   const dispatch = useAppDispatch();
 
-  const loginRef = useRef<TextFieldProps>({ value: '' });
-  const repoRef = useRef<TextFieldProps>({ value: '' });
+  const [login, setLogin] = useState<string>(getSettings()?.user.login || '');
+  const [repo, setRepo] = useState<string>(getSettings()?.repo || '');
 
-  const [disabledButton, setDisabledButton] = useState(true);
+  const [wasChanged, setWasChanged] = useState(false);
 
   const commonChangeHangler = () => {
     dispatch(setBlackList([]));
     dispatch(contributorsActionCreatorApi.clearState());
+    setWasChanged(true);
   };
 
-  const loginChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const loginChangeHandler = (value: string) => {
     commonChangeHangler();
-    repoRef.current.value = '';
-    dispatch(fetchUser({ login: event.target.value }));
+    setLogin(value);
+    setRepo('');
+    dispatch(fetchUser({ login: value }));
   };
 
-  const repoChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const repoChangeHandler = (value: string) => {
     commonChangeHangler();
-    const repo: string = repoRef.current.value as string;
+    setRepo(value);
     if (user?.login)
       dispatch(
         fetchContributors({
           owner: user.login,
-          repo,
+          repo: value,
         })
       );
   };
@@ -59,12 +53,12 @@ const SettingsForm: FC<Props> = ({ closeHandler }) => {
     value: string[]
   ) => {
     dispatch(setBlackList(value));
-    setDisabledButton(false);
+    setWasChanged(true);
   };
 
   const buttonHandler = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const repo: string = repoRef.current.value as string;
+
     if (user && repo && contributors) {
       setSettings({
         user,
@@ -72,31 +66,25 @@ const SettingsForm: FC<Props> = ({ closeHandler }) => {
         blackList,
       });
     }
-    closeHandler();
+    setWasChanged(false);
   };
 
   return (
     <form>
       <Stack spacing={2}>
-        <TextField
-          autoComplete="off"
-          required
+        <Input
           id="login"
           label="Login"
           onChange={loginChangeHandler}
-          defaultValue={getSettings()?.user.login || ''}
-          inputRef={loginRef}
+          value={login}
         />
 
-        <TextField
-          autoComplete="off"
-          required
+        <Input
           id="repo"
           label="Repo"
           onChange={repoChangeHandler}
-          defaultValue={getSettings()?.repo || ''}
           disabled={!user}
-          inputRef={repoRef}
+          value={repo}
         />
 
         <Autocomplete
@@ -105,7 +93,6 @@ const SettingsForm: FC<Props> = ({ closeHandler }) => {
           multiple
           id="blacklist"
           value={blackList}
-          defaultValue={getSettings()?.blackList || []}
           options={contributors ? contributors.map((item) => item.login) : []}
           filterSelectedOptions
           renderTags={(value: readonly string[], getTagProps) =>
@@ -126,7 +113,7 @@ const SettingsForm: FC<Props> = ({ closeHandler }) => {
           onClick={buttonHandler}
           type="submit"
           variant="contained"
-          disabled={!user || !contributors || disabledButton}
+          disabled={!user || !contributors || !wasChanged}
         >
           Save settings
         </Button>

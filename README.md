@@ -2,7 +2,7 @@
 
 Домашнее задание для "Школы программистов HeadHunter" (react/redux)
 
-## Ссылка на GitHub Pages 🎨
+## Ссылка на GitHub Pages 👀
 
 [Ссылка](https://nikita160.github.io/react-hw/)
 
@@ -28,5 +28,6 @@
 
 - HTML/CSS
 - JavaScript
-- React
-- Redux
+- react
+- redux
+- redux-thunk

@@ -1,5 +1,5 @@
 import { AnyAction, Dispatch } from 'redux';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { ThunkAction } from 'redux-thunk';
 
 import {
   contributorsActionCreatorApi,
@@ -9,7 +9,7 @@ import {
 
 import { RootState } from './store';
 
-const DEBOUNCE_TIMEOUT = 3000;
+const DEBOUNCE_TIMEOUT = 2000;
 
 //Github API URLs:
 // https://api.github.com/users/USERNAME

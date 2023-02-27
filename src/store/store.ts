@@ -1,5 +1,5 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import thunk, { ThunkDispatch } from 'redux-thunk';
+import thunk from 'redux-thunk';
 import { blackList } from './blackListReduser';
 import { contributorsFetching, userFetching } from './fetchingReducer';
 

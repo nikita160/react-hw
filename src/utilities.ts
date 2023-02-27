@@ -13,7 +13,6 @@ export function setSettings(settings: Settings): void {
 }
 
 export function getSettings(): Settings | null {
-  let settings: Settings;
   try {
     let str = localStorage.getItem('settings');
     if (str !== null) return JSON.parse(str);

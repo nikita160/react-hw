@@ -25,7 +25,7 @@ const LayoutCard: FC = () => {
           />
         </FormGroup>
 
-        {visibleSettingsForm && <SettingsForm closeHandler={switchHandler} />}
+        {visibleSettingsForm && <SettingsForm />}
 
         <MainCard />
       </Stack>
