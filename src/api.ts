@@ -1,5 +1,3 @@
-import { UserData } from './utilities';
-
 export type RequestRepoParams = {
   login: string;
   query: string;

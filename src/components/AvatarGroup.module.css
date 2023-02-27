@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+}
+
+.avatarContainer {
+  display: flex;
+}
+
+.extraText {
+  margin-left: 5px;
+  color: rgba(70, 70, 70, 0.553);
+  font-size: small;
+  font-weight: bold;
+}

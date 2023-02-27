@@ -1,0 +1,6 @@
+.header {
+  font-weight: bold;
+  color: #1976d2;
+  padding: 1rem 0 0.5rem;
+  border-bottom: 1px solid rgba(145, 145, 145, 0.333);
+}

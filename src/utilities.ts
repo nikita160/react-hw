@@ -1,12 +1,7 @@
-export type UserData = {
-  login: string;
-  avatarUrl: string;
-};
-
 export type Settings = {
   user: UserData;
   repo: string;
-  blacklist: string[];
+  blackList: string[];
 };
 
 export function setSettings(settings: Settings): void {
