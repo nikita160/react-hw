@@ -1,0 +1,19 @@
+.messageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+}
+
+.resultContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+}
+
+.progressBarContainer {
+  display: flex;
+  align-items: center;
+  height: 20px;
+}
